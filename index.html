@@ -21,23 +21,27 @@
 </head>
 
 <body>
-  <main>
-    <header class="cabecera">
-      <picture style="margin: 20px;">
-        <img id="imagenTitulo" src="./images/JARL_Logo.jpg" alt="JARL_Logo">
-      </picture>
-      <h1 id="titulo">Camino del caminante</h1>
-    </header>
 
-    <div id="principal">
-      <div id="datosdelejercicio">
-        <h3>Trayecto realizado:</h3>
-        <fieldset>
-          <div id="map_canvas">
-          <div id="direccionMapa"></div>
-          </div>
-        </fieldset>
-      </div>
+  <header class="cabecera">
+    <picture style="margin: 20px;">
+      <img id="imagenTitulo" src="./images/JARL_Logo.jpg" alt="JARL_Logo">
+    </picture>
+    <h1 id="titulo">Camino del caminante</h1>
+  </header>
+
+  <main>
+    <!--Mapa-->
+    <div id="contenedor_mapa">
+      <h3>Trayecto realizado:</h3>
+      <div id="mapa_canvas"></div>
+      <input type="text" id="iDireccion" value="">
+    </div>
+    <!--Trazado-->
+    <div id="contenedor_trazado">
+      <label for="trazado">Recorrido: </label>
+      <select id="trazado">
+      </select>
+      <input type="button" id="bInicioParo" value="">
     </div>
   </main>
   <!--Pie de página-->
@@ -45,7 +49,6 @@
     <p>Desarrollo de aplicaciones Web(DAW) &copy; CIFP Santa Catalina</p>
     <p>Realizado por: José A. Rodríguez López.</p>
   </footer>
-
 </body>
 
 </html>
