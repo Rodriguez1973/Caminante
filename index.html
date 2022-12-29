@@ -15,7 +15,10 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
   <!--Script operaciones Google Maps-->
   <script src="./js/GoogleMaps.js" defer></script>
-
+  <!--Script con funciones auxiliares-->
+  <script src="./js/Funciones.js" defer></script>
+  <!--Script Sintesis de voz-->
+  <script src="./js/SintesisVoz.js" defer></script>
   <!--Script objetos y eventos sobre el documento-->
   <script src="./js/index.js" defer></script>
 </head>
@@ -32,25 +35,19 @@
   <main>
     <!--Mapa-->
     <div id="contenedor_mapa">
-      <h3>Trayecto realizado:</h3>
+      <h3>Ruta realizada:</h3>
       <div id="mapa_canvas"></div>
       <input type="text" id="iDireccion" value="">
     </div>
     <!--Trazado-->
-    <div id="contenedor_trazado">
-      <label for="trazado">Trazado: </label>
+    <div id="contenedor_trayecto">
+      <label for="trazado">Trayecto: </label>
       <select id="trazado">
-        <option value="" disabled>Seleccione Tipo</option>
       </select>
       <input type="button" id="bInicioParo" value="Iniciar">
     </div>
     <!--Trazado-->
     <div id="contenedor_configuracion">
-      <label for="trazado">Trazado: </label>
-      <select id="trazado">
-        <option value="" disabled>Seleccione Tipo</option>
-      </select>
-      <input type="button" id="bInicioParo" value="Iniciar">
     </div>
   </main>
   <!--Pie de página-->

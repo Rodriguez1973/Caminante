@@ -66,7 +66,7 @@ main {
   margin: 0;
 }
 
-#contenedor_trazado {
+#contenedor_trayecto {
   display: inline-flexbox;
   margin: 0;
   border: solid 1px black;
@@ -75,23 +75,23 @@ main {
   background-color: rgb(186, 218, 249);
 }
 
-#contenedor_trazado label {
+#contenedor_trayecto label {
   color: #121d29;
   font-weight: bold;
   margin: 1%;
   font-size: 2vh;
 }
 
-#contenedor_trazado select {
+#contenedor_trayecto select {
   font-size: 2vh;
   margin: 1%;
   width: 70%;
 }
 
-#contenedor_trazado #bInicioParo {
+#contenedor_trayecto #bInicioParo {
   color: #121d29;
   margin: 1%;
-  background-color: rgb(241, 169, 14);
+  background-color: #24f519;
   text-align: right;
   font-size: 2vh;
   border-radius: 1.5vh;
