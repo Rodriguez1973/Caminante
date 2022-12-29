@@ -113,6 +113,10 @@ main {
   background-color: rgb(186, 218, 249);
 }
 
+#contenedor_configuracion #iHoraActual{
+  width: 15vh;
+}
+
 
 
 /*Footer*/

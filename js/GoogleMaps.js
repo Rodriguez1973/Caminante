@@ -6,7 +6,7 @@ let mapa //Referencia del mapa.
 let latitud = 41.670141205551865 //Latitud de inicio del centro del mapa.
 let longitud = -3.689933230224045 //Longitud de inicio del centro del mapa.
 let coordenadasValidas = true //Flag para controlar si las coordenadas son válidas con el fin de poner el marcador en el mapa.
-let marcadores = []
+let marcadores = [] //Array con los marcadores de posición del mapa.
 let posicionGeolocalizacion //Geolocalización.
 
 //--------------------------------------------------------------------------------------------------
@@ -15,7 +15,7 @@ function mostrarMapa() {
   mapa = new google.maps.Map(document.getElementById('mapa_canvas'), {
     // En el mapa se visualiza el mapa correspondiente a esta latitud, longitud
     center: new google.maps.LatLng(latitud, longitud), //El mapa se visualiza centrado en las coordenadas de latitud y longitud pasadas como argumento
-    zoom: 18, //Zoom del mapa
+    zoom: parseInt(iZoom.value), //Zoom del mapa
     draggableCursor: 'auto', //El nombre o la URL del cursor que se muestra al desplazar el mouse sobre un mapa arrastrable.
     draggingCursor: 'crosshair', //El nombre o la URL del cursor que se muestra cuando se arrastra el mapa.
     mapTypeId: google.maps.MapTypeId.SATELLITE, //Tipo de mapa.
@@ -25,12 +25,30 @@ function mostrarMapa() {
 }
 
 //------------------------------------------------------------------------------------------------
-//Referencia al icono de inicio. Define sus propiedades.
+//Referencia al icono de inicio de la ruta. Define sus propiedades.
 let iconoInicio = {
   url: './images/MarcadorInicio.png', //Imagen del marcador de posición.
   scaledSize: new google.maps.Size(50, 50), //Tamaño escala.
   origin: new google.maps.Point(0, 0), //Origen imagen.
   anchor: new google.maps.Point(25, 50), //Punto de anclaje
+}
+
+//--------------------------------------------------------------------------------------------------
+//Referencia al icono de fin de de la ruta. Define sus propiedades.
+let iconoFin= {
+  url: './images/MarcadorFin.png', //Imagen del marcador de posición.
+  scaledSize: new google.maps.Size(50, 50), //Tamaño escala.
+  origin: new google.maps.Point(0, 0), //Origen imagen.
+  anchor: new google.maps.Point(25, 50), //Punto de anclaje
+}
+
+//--------------------------------------------------------------------------------------------------
+//Referencia al icono del punto intermedio de la ruta fin de de la ruta. Define sus propiedades.
+let iconoPuntoIntermedio= {
+  url: './images/PuntoIntermedio.png', //Imagen del marcador de posición.
+  scaledSize: new google.maps.Size(25, 25), //Tamaño escala.
+  origin: new google.maps.Point(0, 0), //Origen imagen.
+  anchor: new google.maps.Point(12.5, 12.5), //Punto de anclaje
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -69,6 +87,7 @@ function leerDireccion(latlng) {
 //Función que muestra la dirección en la interfaz.
 function mostrarDireccion(latlng, direccion) {
   iDireccion.value = direccion
+  añadirDireccion(direccion)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -84,20 +103,19 @@ function borrarMarcadores() {
 //--------------------------------------------------------------------------------------------------
 // Añadir un marcador al mapa.
 function añadirMarcador(geolocalizacion) {
+  if(primeraMuestra){
+    icono=iconoInicio
+  }else{
+    icono=iconoPuntoIntermedio
+  }
   let marcador = new google.maps.Marker({
-    icon: iconoInicio,
+    icon: icono,
     position: geolocalizacion,
     map: mapa,
   })
   marcadores.push(marcador)
   leerDireccion(geolocalizacion)
   mapa.setCenter(geolocalizacion)
-}
-
-//--------------------------------------------------------------------------------------------------
-//Escribe la dirección en la parte inferior del mapa.
-function mostrarDireccionDebajoMapa(direccion) {
-  direccionMapa.innerText = direccion
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -120,8 +138,8 @@ const opcionesGeolocalizacion = {
 //--------------------------------------------------------------------------------------------------
 //Muestra el error de la geolocalización.
 function errorGeolocalizacion(error) {
-  //let mensajeError = 'Error ' + error.code + ': ' + error.message
-  //mostrarVentanaEmergente(mensajeError, 'error')
+  let mensajeError = 'Error ' + error.code + ': ' + error.message
+  mostrarVentanaEmergente(mensajeError, 'error')
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -140,6 +158,9 @@ function capturarGeolocalizacion() {
   )
 
   if (posicionGeolocalizacion) {
+    if(primeraMuestra){
+      reproducirMensaje('Iniciando toma de datos.')
+    }
     añadirMarcador(posicionGeolocalizacion)
     primeraMuestra = false
     trazarLinea()
@@ -151,13 +172,12 @@ function capturarGeolocalizacion() {
 function trazarLinea() {
   if (!primeraMuestra) {
     let trazado = [] //Trazado con las coordenadas de los marcadores.
-    let colorTrazo = 'blue'
-    let grosorTrazo = 1
+    let colorTrazo = iColor.value //Color del trazo.
+    let grosorTrazo = parseInt(iAncho.value) //Ancho del trazo.
 
     for (const marcador of marcadores) {
       trazado.push(marcador.position)
     }
-    console.log(trazado)
     // Crear un objeto Polyline que define las propiedades de la linea a dibujar
     var ruta = new google.maps.Polyline({
       path: trazado,
@@ -167,13 +187,11 @@ function trazarLinea() {
       geodesic: true,
     })
 
-    // Esta funcion dibuja el Polyline creado en el mama
-    eval(ruta).setMap(mapa)
+    //Dibuja el Polyline creado en el mama
+    ruta.setMap(mapa)
   }
 }
 
 //--------------------------------------------------------------------------------------------------
 //Llamada a la función que muestra el mapa.
 mostrarMapa() //Muestra el mapa.
-
-//------------------------------------------------------------------------------

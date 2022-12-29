@@ -41,13 +41,21 @@
     </div>
     <!--Trazado-->
     <div id="contenedor_trayecto">
-      <label for="trazado">Trayecto: </label>
-      <select id="trazado">
+      <label for="sTrazado">Trayecto: </label>
+      <select id="sTrazado">
       </select>
       <input type="button" id="bInicioParo" value="Iniciar">
     </div>
     <!--Trazado-->
     <div id="contenedor_configuracion">
+      <label for="iHoraActual">Hora actual: </label>
+      <input type="text" id="iHoraActual">
+      <label for="iZoom">Zoom: </label>
+      <input type="range" id="iZoom" min="14" max="21" value="18" step="1">
+      <label for="iColor">Color trazo:</label>
+      <input type="color" id="iColor" value="#0000FF">
+      <label for="iAncho">Anchura trazo:</label>
+      <input type="range" id="iAncho" min="1" max="10" value="4" step="1">
     </div>
   </main>
   <!--Pie de página-->
