@@ -2,7 +2,7 @@
 Proyecto realizado por: José A. Rodríguez López
 Fecha: 29/12/2022
 */
-let intervaloTiempoMuestra = 5 //Intervalo de tiempo en segundos para la toma de cada muestra.
+let intervaloTiempoMuestra = 2 //Intervalo de tiempo en segundos para la toma de cada muestra.
 let intervaloTiempoReloj = 1 //Intervalo de tiempo en segundos para actualizar reloj.
 let primeraMuestra = true //Flag que indica si es la primera muestra.
 let ultimaMuestra=false //Flag que indica si es la última muestra.
@@ -52,8 +52,8 @@ function actualizarTrazado(){
 //--------------------------------------------------------------------------------------------------
 //Elimina los eventos change durante la toma de muestras.
 function destruirEventos(){
-  iColor.removeEventListenerr('change', actualizarTrazado, false)
-  iColor.removeEventListenerr('change', actualizarTrazado, false)
+  iColor.removeEventListener('change', actualizarTrazado, false)
+  iColor.removeEventListener('change', actualizarTrazado, false)
 }
 
 //--------------------------------------------------------------------------------------------------
