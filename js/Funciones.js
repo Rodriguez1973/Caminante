@@ -14,6 +14,31 @@ function mostrarVentanaEmergente(mensaje, icono) {
 }
 
 //-------------------------------------------------------------------------------------------------
+//Muestra la información del marcador.
+function mostrarInformacionMarcador(marcador) {
+  Swal.fire({
+    title: 'DATOS LOCALIZACIÓN',
+    icon: 'info',
+    html:
+      '<b>Hora: </b>' +
+      marcador.hora +
+      '<br>' +
+      '<b>Fecha: </b>' +
+      marcador.fecha +
+      '<br>' +
+      '<b>Latitud: </b>' +
+      marcador.position.lat() +
+      '<br>' +
+      '<b>Longitud: </b>' +
+      marcador.position.lng() +
+      '<br>' +
+      '<b>Distancia al punto anterior: </b>' +
+      marcador.distancia+"m.",
+    confirmButtonText: 'Aceptar',
+  })
+}
+
+//-------------------------------------------------------------------------------------------------
 //Obtiene la fecha actual.
 function obtenerFechaActual() {
   let fecha = new Date() //Fecha actual
@@ -40,8 +65,10 @@ function obtenerHoraActual() {
 
 //--------------------------------------------------------------------------------------------------
 //Añade la dirección al trayecto.
-function añadirDireccion(direccion){
-  opcion=document.createElement('option')
-  opcion.innerText=direccion
+function añadirDireccion(latlng, direccion) {
+  opcion = document.createElement('option')
+  opcion.setAttribute(posicion)
+  opcion.posicion=latlng
+  opcion.innerText = direccion
   sTrazado.appendChild(opcion)
 }

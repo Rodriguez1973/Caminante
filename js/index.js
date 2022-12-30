@@ -6,6 +6,7 @@ let intervaloTiempoMuestra = 2 //Intervalo de tiempo en segundos para la toma de
 let intervaloTiempoReloj = 1 //Intervalo de tiempo en segundos para actualizar reloj.
 let primeraMuestra = true //Flag que indica si es la primera muestra.
 let ultimaMuestra=false //Flag que indica si es la última muestra.
+let actualizaTrazado=false //Flag que indica si se está actualizando el trazado.
 let rutaIniciada = false //Flag que indica si está iniciada la toma de datos de una ruta o no.
 let temporizadorMuestra = null //Identificador del temporizador.
 let pausado = false //Flag que indica si esta pausada la toma de muestras.
@@ -29,51 +30,41 @@ bInicioParo.addEventListener('click', iniciarPararRuta, false) //Evento click al
 iZoom.addEventListener('change', () => {
   mapa.setZoom(parseInt(iZoom.value))
 }, false)
-
-
-//--------------------------------------------------------------------------------------------------
-//Crea los eventos change al finalizar la toma de muestras.
-function crearEventos(){
 //Evento change al cambiar el color del trazo.
 iColor.addEventListener('change', actualizarTrazado,false)
 //Evento change al cambiar el ancho del trazo.
 iAncho.addEventListener('change', actualizarTrazado, false)
-}
+//Evento change al cambiar el la selección del trayecto.
+sTrazado.addEventListener('change', (evt)=>{
+  mapa.setCenter(evt.target.posicion)
+},false)
 
 //--------------------------------------------------------------------------------------------------
 //Actualiza el las propiedades del trazado.
 function actualizarTrazado(){
   if(ruta){
-    borrarTrazado()
+    actualizaTrazado=true
     trazarLinea()
+    actualizaTrazado=false
   }
-}
-
-//--------------------------------------------------------------------------------------------------
-//Elimina los eventos change durante la toma de muestras.
-function destruirEventos(){
-  iColor.removeEventListener('change', actualizarTrazado, false)
-  iColor.removeEventListener('change', actualizarTrazado, false)
 }
 
 //--------------------------------------------------------------------------------------------------
 //Inicia o finaliza la toma de datos de una ruta.
 function iniciarPararRuta() {
   if (rutaIniciada) {
-    
-    rutaIniciada = false
     bInicioParo.style.backgroundImage = "url('./images/Iniciar.png')"
     bInicioParo.style.backgroundColor = '#24f519'
     bInicioParo.value = 'Iniciar'
     pararCapturaDatos()
-    crearEventos()
     primeraMuestra = true;
-    reproducirMensaje('Fin de la toma de datos.')
+    sTrazado.disabled=false //Habilita la select con las localizaciones del trazado.
+    rutaIniciada = false
   } else {
     sTrazado.innerHTML = "";
+    sTrazado.dissabled=true //Deshabilita la select con las localizaciones del trazado.
     borrarMarcadores()
     borrarTrazado()
-    destruirEventos()
     rutaIniciada = true
     bInicioParo.style.backgroundImage = "url('./images/Parar.png')"
     bInicioParo.style.backgroundColor = '#fb3737'
@@ -86,7 +77,6 @@ function iniciarPararRuta() {
 //--------------------------------------------------------------------------------------------------
 //Iniciar toma de datos.
 function iniciarCapturaDatos() {
-  reproducirMensaje('Iniciando toma de datos.')
   //Ejecuta la función repetidamente cada intervalo indicado en milisegundos.
   temporizadorMuestra = setInterval(() => {
     if (!pausado) {
@@ -98,10 +88,19 @@ function iniciarCapturaDatos() {
 //--------------------------------------------------------------------------------------------------
 //Parar toma de datos.
 function pararCapturaDatos() {
-  //Sustituye el ícono del último marcador.
-  marcadores[marcadores.length - 1].icon = iconoFin
   //Finaliza la captura de datos.
   clearInterval(temporizadorMuestra)
+  if(marcadores.length>0){
+    //Borrar el último marcador.
+    marcadores[marcadores.length - 1].setMap(null)
+    ultimaMuestra=true
+    añadirMarcador(posicionGeolocalizacion)
+  }else if(marcadores.length==0){
+    reproducirMensaje("No se han registrado datos.")
+  }else{
+    reproducirMensaje('Fin de la toma de datos.')
+  }  
+  ultimaMuestra=false
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -21,7 +21,6 @@ function mostrarMapa() {
     draggingCursor: 'crosshair', //El nombre o la URL del cursor que se muestra cuando se arrastra el mapa.
     mapTypeId: google.maps.MapTypeId.SATELLITE, //Tipo de mapa.
   })
-  añadirEventoClickMapa()
 }
 
 //------------------------------------------------------------------------------------------------
@@ -46,15 +45,9 @@ let iconoFin = {
 //Referencia al icono del punto intermedio de la ruta fin de de la ruta. Define sus propiedades.
 let iconoPuntoIntermedio = {
   url: './images/PuntoIntermedio.png', //Imagen del marcador de posición.
-  scaledSize: new google.maps.Size(25, 25), //Tamaño escala.
+  scaledSize: new google.maps.Size(12, 12), //Tamaño escala.
   origin: new google.maps.Point(0, 0), //Origen imagen.
-  anchor: new google.maps.Point(12.5, 12.5), //Punto de anclaje
-}
-
-//--------------------------------------------------------------------------------------------------
-//Añade escuchador del evento click sobre el mapa
-function añadirEventoClickMapa() {
-  google.maps.event.addListener(mapa, 'click', function (event) { })
+  anchor: new google.maps.Point(6, 6), //Punto de anclaje
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -87,7 +80,7 @@ function leerDireccion(latlng) {
 //Función que muestra la dirección en la interfaz.
 function mostrarDireccion(latlng, direccion) {
   iDireccion.value = direccion
-  añadirDireccion(direccion)
+  añadirDireccion(latlng, direccion)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -113,13 +106,52 @@ function añadirMarcador(geolocalizacion) {
     icono = iconoPuntoIntermedio
   }
 
+  let distanciaEntrePuntos = 0
+  //Si no es la primera muestra. Calcula la distancia en metros con respecto al punto anterior.
+  if (!primeraMuestra && !ultimaMuestra) {
+    distanciaEntrePuntos =
+      Math.round(
+        calcularDistancia2Puntos(
+          geolocalizacion,
+          marcadores[marcadores.length - 1].position,
+        ) * 100,
+      ) / 100
+  } else if (ultimaMuestra) {
+    if (marcadores.length > 1) {
+      distanciaEntrePuntos =
+        Math.round(
+          calcularDistancia2Puntos(
+            marcadores[marcadores.length - 2].position,
+            geolocalizacion,
+          ) * 100,
+        ) / 100
+    }
+  }
 
-  if (primeraMuestra || ultimaMuestra || !primeraMuestra && calcularDistancia2Puntos(geolocalizacion, marcadores[marcadores.length - 1].position) >= distanciaMinima) {
+  if (
+    primeraMuestra ||
+    ultimaMuestra ||
+    (!primeraMuestra && distanciaEntrePuntos >= distanciaMinima)
+  ) {
     marcador = new google.maps.Marker({
       icon: icono,
       position: geolocalizacion,
       map: mapa,
+      hora: obtenerHoraActual(),
+      fecha: obtenerFechaActual(),
+      distancia: distanciaEntrePuntos,
     })
+
+    //Añade el evento click al marcador.
+    google.maps.event.addListener(
+      marcador,
+      'click',
+      function () {
+        mostrarInformacionMarcador(marcador)
+      },
+      false,
+    )
+
     marcadores.push(marcador)
     leerDireccion(geolocalizacion)
     mapa.setCenter(geolocalizacion)
@@ -129,7 +161,10 @@ function añadirMarcador(geolocalizacion) {
 //--------------------------------------------------------------------------------------------------
 //Calcular la distancia entre dos puntos en metros.
 function calcularDistancia2Puntos(posicionInicial, posicionFinal) {
-  return distancia = google.maps.geometry.spherical.computeDistanceBetween(posicionInicial, posicionFinal)
+  return (distancia = google.maps.geometry.spherical.computeDistanceBetween(
+    posicionInicial,
+    posicionFinal,
+  ))
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -166,6 +201,7 @@ function capturarGeolocalizacion() {
     if (!primeraMuestra) {
       trazarLinea()
     } else {
+      reproducirMensaje('Iniciando toma de datos.')
       primeraMuestra = false
     }
   }
@@ -174,7 +210,7 @@ function capturarGeolocalizacion() {
 //--------------------------------------------------------------------------------------------------
 //Traza una línea entre dos puntos en el mapa.
 function trazarLinea() {
-  if (!primeraMuestra) {
+  if (!primeraMuestra || actualizaTrazado) {
     let trazado = [] //Trazado con las coordenadas de los marcadores.
     let colorTrazo = iColor.value //Color del trazo.
     let grosorTrazo = parseInt(iAncho.value) //Ancho del trazo.
@@ -182,6 +218,8 @@ function trazarLinea() {
     for (const marcador of marcadores) {
       trazado.push(marcador.position)
     }
+
+    borrarTrazado()
     // Crear un objeto Polyline que define las propiedades de la linea a dibujar
     ruta = new google.maps.Polyline({
       path: trazado,
@@ -202,7 +240,6 @@ function borrarTrazado() {
   if (ruta) {
     ruta.setMap(null)
   }
-  ruta=null;
 }
 
 //--------------------------------------------------------------------------------------------------
