@@ -9,7 +9,6 @@ header {
   position: relative;
   align-items: center;
   color: rgb(66, 158, 250);
-  min-width: 860px;
 }
 
 #titulo {
@@ -46,7 +45,6 @@ main {
   border: solid 1px black;
   box-sizing: border-box;
   height: auto;
-  min-width: 600px;
   background-color: rgb(186, 218, 249);
   text-align: center;
 }
@@ -62,30 +60,31 @@ main {
   border: solid 1px black;
   box-sizing: border-box;
   width: 100%;
-  height: 50vh;
+  height: 45vh;
   margin: 0;
 }
 
 #contenedor_trayecto {
   display: inline-flexbox;
-  margin: 0;
+  align-items: center;
   border: solid 1px black;
   box-sizing: border-box;
   height: auto;
   background-color: rgb(186, 218, 249);
+  text-align: center;
 }
 
 #contenedor_trayecto label {
   color: #121d29;
   font-weight: bold;
-  margin: 1%;
+  margin: 1% 0;
   font-size: 2vh;
 }
 
 #contenedor_trayecto select {
   font-size: 2vh;
-  margin: 1%;
-  width: 70%;
+  margin: 1% 0 1% 1%;
+  width: 80%;
 }
 
 #contenedor_trayecto #bInicioParo {
@@ -95,7 +94,7 @@ main {
   text-align: right;
   font-size: 2vh;
   border-radius: 1.5vh;
-  width:11vh;
+  min-width:13vh;
   height: 4.5vh;
   font-weight: bold;
   background-repeat: no-repeat;
@@ -105,7 +104,7 @@ main {
 }
 
 #contenedor_configuracion {
-  display: inline-flexbox;
+  text-align: center;
   margin: 0;
   border: solid 1px black;
   box-sizing: border-box;
@@ -113,8 +112,36 @@ main {
   background-color: rgb(186, 218, 249);
 }
 
+#contenedor_configuracion #controles{
+  display: flex;
+  margin: 0;
+  justify-content: center;
+}
+
+#contenedor_configuracion #controles div{
+  min-width: auto;
+}
+
 #contenedor_configuracion #iHoraActual{
-  width: 15vh;
+  width: 20vh;
+  min-width: 20vh;
+  font-size: 2vh;
+}
+
+#contenedor_configuracion div{
+  margin:1% 0;
+}
+
+#contenedor_configuracion label{
+  font-weight: bold;
+}
+
+#contenedor_configuracion #controles input{
+  margin: 1% 3% 2% 0;
+}
+
+#contenedor_configuracion #controles label{
+  margin: 1% 1% 2% 0;
 }
 
 /*Footer*/
@@ -127,4 +154,78 @@ footer {
 footer p {
   text-align: center;
   font-size: 1.2vh;
+}
+
+@media screen and (max-width:660px){
+  #titulo {
+    font-size: 3vh;
+    top: 10%;
+    margin-left: 0;
+  }
+
+  #contenedor_trayecto{
+    display: flexbox;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #contenedor_trayecto div{
+    margin:0 auto;
+  }
+
+  #contenedor_trayecto #bInicioParo{
+    width:14vh;
+    height: 5vh;
+  }
+
+  #contenedor_configuracion #iHoraActual{
+    width: 20.5vh;
+    min-width: 20.5vh;
+  }
+
+  #contenedor_configuracion #controles{
+    flex-direction: column;
+    text-align: left;
+  }
+
+  #contenedor_configuracion #controles label{
+    margin-bottom: 0;
+  }
+
+  #contenedor_configuracion #controles input{
+    margin-bottom: 1%;
+  }
+
+  #contenedor_configuracion #controles label, #contenedor_configuracion #controles input{
+    margin-left: 2%;
+  }
+}
+
+@media (max-height:600px){
+  #contenedor_trayecto label{
+    font-size: 14px;
+  }
+
+  #contenedor_configuracion label{
+    font-size: 14px;
+  }
+
+  #contenedor_configuracion #iHoraActual{
+    font-size: 14px;
+    min-width: 140px;
+  }
+
+  #contenedor_trayecto #bInicioParo{
+    width: 90px;
+    height: 40px;
+    font-size: 14px;
+  }
+
+  #contenedor_trayecto select {
+    font-size: 14px;
+  }
+
+  #contenedor_mapa #iDireccion {
+    font-size: 14px;
+  }
 }

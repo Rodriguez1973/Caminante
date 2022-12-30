@@ -4,7 +4,7 @@
 <head>
   <title>Camino del caminante</title>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximun-scale=1, , minimun-scale=0.75">
   <link rel="stylesheet" href="./css/estilos.css">
   <link rel="icon" href="data:,"> <!--Elimina error favicon.ico-->
   <!--Google Maps-->
@@ -41,22 +41,27 @@
     </div>
     <!--Trazado-->
     <div id="contenedor_trayecto">
-      <label for="sTrazado">Trayecto: </label>
-      <select id="sTrazado">
-      </select>
+      <div>
+        <label for="sTrazado">Trayecto: </label>
+        <select id="sTrazado">
+        </select>
+      </div>
       <input type="button" id="bInicioParo" value="Iniciar">
     </div>
     <!--Trazado-->
     <div id="contenedor_configuracion">
-      <label for="iHoraActual">Hora actual: </label>
-      <input type="text" id="iHoraActual">
-      <br>
-      <label for="iZoom">Zoom: </label>
-      <input type="range" id="iZoom" min="14" max="21" value="18" step="1">
-      <label for="iColor">Color trazo:</label>
-      <input type="color" id="iColor" value="#0000FF">
-      <label for="iAncho">Anchura trazo:</label>
-      <input type="range" id="iAncho" min="1" max="10" value="4" step="1">
+      <div>
+        <label for="iHoraActual">Hora actual: </label>
+        <input type="text" id="iHoraActual" readonly>
+      </div>
+      <div id="controles">
+        <label for="iZoom">Zoom: </label>
+        <input type="range" id="iZoom" min="14" max="21" value="18" step="1">
+        <label for="iColor">Color trazo:</label>
+        <input type="color" id="iColor" value="#0000FF">
+        <label for="iAncho">Anchura trazo:</label>
+        <input type="range" id="iAncho" min="1" max="10" value="4" step="1">
+      </div>
     </div>
   </main>
   <!--Pie de página-->
