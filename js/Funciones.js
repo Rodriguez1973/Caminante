@@ -66,9 +66,8 @@ function obtenerHoraActual() {
 //--------------------------------------------------------------------------------------------------
 //Añade la dirección al trayecto.
 function añadirDireccion(latlng, direccion) {
-  opcion = document.createElement('option')
-  opcion.setAttribute(posicion)
-  opcion.posicion=latlng
+  let opcion = document.createElement('option')
+  opcion.setAttribute("posicion", latlng)
   opcion.innerText = direccion
   sTrazado.appendChild(opcion)
 }
