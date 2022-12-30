@@ -6,7 +6,8 @@ let mapa //Referencia del mapa.
 let latitud = 41.670141205551865 //Latitud de inicio del centro del mapa.
 let longitud = -3.689933230224045 //Longitud de inicio del centro del mapa.
 let coordenadasValidas = true //Flag para controlar si las coordenadas son válidas con el fin de poner el marcador en el mapa.
-let marcadores = [] //Array con los marcadores de posición del mapa.
+let marcadores = [] //Marcadores de posición del mapa.
+let ruta = null //Trazado de la ruta.
 let posicionGeolocalizacion //Geolocalización.
 
 //--------------------------------------------------------------------------------------------------
@@ -20,7 +21,6 @@ function mostrarMapa() {
     draggingCursor: 'crosshair', //El nombre o la URL del cursor que se muestra cuando se arrastra el mapa.
     mapTypeId: google.maps.MapTypeId.SATELLITE, //Tipo de mapa.
   })
-
   añadirEventoClickMapa()
 }
 
@@ -35,7 +35,7 @@ let iconoInicio = {
 
 //--------------------------------------------------------------------------------------------------
 //Referencia al icono de fin de de la ruta. Define sus propiedades.
-let iconoFin= {
+let iconoFin = {
   url: './images/MarcadorFin.png', //Imagen del marcador de posición.
   scaledSize: new google.maps.Size(50, 50), //Tamaño escala.
   origin: new google.maps.Point(0, 0), //Origen imagen.
@@ -44,7 +44,7 @@ let iconoFin= {
 
 //--------------------------------------------------------------------------------------------------
 //Referencia al icono del punto intermedio de la ruta fin de de la ruta. Define sus propiedades.
-let iconoPuntoIntermedio= {
+let iconoPuntoIntermedio = {
   url: './images/PuntoIntermedio.png', //Imagen del marcador de posición.
   scaledSize: new google.maps.Size(25, 25), //Tamaño escala.
   origin: new google.maps.Point(0, 0), //Origen imagen.
@@ -54,7 +54,7 @@ let iconoPuntoIntermedio= {
 //--------------------------------------------------------------------------------------------------
 //Añade escuchador del evento click sobre el mapa
 function añadirEventoClickMapa() {
-  google.maps.event.addListener(mapa, 'click', function (event) {})
+  google.maps.event.addListener(mapa, 'click', function (event) { })
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -103,35 +103,39 @@ function borrarMarcadores() {
 //--------------------------------------------------------------------------------------------------
 // Añadir un marcador al mapa.
 function añadirMarcador(geolocalizacion) {
-  if(primeraMuestra){
-    icono=iconoInicio
-  }else{
-    icono=iconoPuntoIntermedio
+  let marcador = null
+
+  if (primeraMuestra) {
+    icono = iconoInicio
+  } else if (ultimaMuestra) {
+    icono = iconoFin
+  } else {
+    icono = iconoPuntoIntermedio
   }
-  let marcador = new google.maps.Marker({
-    icon: icono,
-    position: geolocalizacion,
-    map: mapa,
-  })
-  marcadores.push(marcador)
-  leerDireccion(geolocalizacion)
-  mapa.setCenter(geolocalizacion)
+
+
+  if (primeraMuestra || ultimaMuestra || !primeraMuestra && calcularDistancia2Puntos(geolocalizacion, marcadores[marcadores.length - 1].position) >= distanciaMinima) {
+    marcador = new google.maps.Marker({
+      icon: icono,
+      position: geolocalizacion,
+      map: mapa,
+    })
+    marcadores.push(marcador)
+    leerDireccion(geolocalizacion)
+    mapa.setCenter(geolocalizacion)
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
-//Calcular la distancia al punto de origen del mapa.
+//Calcular la distancia entre dos puntos en metros.
 function calcularDistancia2Puntos(posicionInicial, posicionFinal) {
-  return (distancia = google.maps.geometry.spherical.computeDistanceBetween(
-    posicionInicial,
-    posicionFinal,
-  ))
+  return distancia = google.maps.geometry.spherical.computeDistanceBetween(posicionInicial, posicionFinal)
 }
 
 //--------------------------------------------------------------------------------------------------
 //Opciones de geolocalización.
 const opcionesGeolocalizacion = {
   enableHighAccuracy: true, //Indica que la aplicación recibirá los mejores resultados posibles.
-  timeout: 900, //Tiempo máximo en milisegundos que el dispositivo puede tardar para devolver una posición.
   maximumAge: 0, //Establece que el dispositivo no puede utilizar una posición de almacenamiento en caché.
 }
 
@@ -158,12 +162,12 @@ function capturarGeolocalizacion() {
   )
 
   if (posicionGeolocalizacion) {
-    if(primeraMuestra){
-      reproducirMensaje('Iniciando toma de datos.')
-    }
     añadirMarcador(posicionGeolocalizacion)
-    primeraMuestra = false
-    trazarLinea()
+    if (!primeraMuestra) {
+      trazarLinea()
+    } else {
+      primeraMuestra = false
+    }
   }
 }
 
@@ -179,7 +183,7 @@ function trazarLinea() {
       trazado.push(marcador.position)
     }
     // Crear un objeto Polyline que define las propiedades de la linea a dibujar
-    var ruta = new google.maps.Polyline({
+    ruta = new google.maps.Polyline({
       path: trazado,
       strokeColor: colorTrazo,
       strokeOpacity: 2,
@@ -187,9 +191,18 @@ function trazarLinea() {
       geodesic: true,
     })
 
-    //Dibuja el Polyline creado en el mama
+    //Dibuja el Polyline creado en el mapa
     ruta.setMap(mapa)
   }
+}
+
+//--------------------------------------------------------------------------------------------------
+//Borra las lineas del trazado
+function borrarTrazado() {
+  if (ruta) {
+    ruta.setMap(null)
+  }
+  ruta=null;
 }
 
 //--------------------------------------------------------------------------------------------------
