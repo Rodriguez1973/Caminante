@@ -42,7 +42,7 @@ let iconoFin = {
 }
 
 //--------------------------------------------------------------------------------------------------
-//Referencia al icono del punto intermedio de la ruta fin de de la ruta. Define sus propiedades.
+//Referencia al icono del punto intermedio de la ruta. Define sus propiedades.
 let iconoPuntoIntermedio = {
   url: './images/PuntoIntermedio.png', //Imagen del marcador de posición.
   scaledSize: new google.maps.Size(12, 12), //Tamaño escala.
@@ -67,10 +67,10 @@ function leerDireccion(latlng) {
           //Mostramos la dirección
           mostrarDireccion(latlng, results[0].formatted_address)
         } else {
-          alert('Resultado no encontrado.')
+          //alert('Resultado no encontrado.')
         }
       } else {
-        alert('El geocodificador falló debido a:' + status)
+        //alert('El geocodificador falló debido a:' + status)
       }
     })
   }
@@ -128,6 +128,7 @@ function añadirMarcador(geolocalizacion) {
     }
   }
 
+  //Si es la primera o última muestra, o cualquier otra posición a una distancia con el punto anterior igual o superior la distancia mínima.
   if (
     primeraMuestra ||
     ultimaMuestra ||
@@ -151,7 +152,6 @@ function añadirMarcador(geolocalizacion) {
       },
       false,
     )
-
     marcadores.push(marcador)
     leerDireccion(geolocalizacion)
     mapa.setCenter(geolocalizacion)

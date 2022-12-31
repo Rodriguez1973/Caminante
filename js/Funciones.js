@@ -33,7 +33,7 @@ function mostrarInformacionMarcador(marcador) {
       marcador.position.lng() +
       '<br>' +
       '<b>Distancia al punto anterior: </b>' +
-      marcador.distancia+"m.",
+      marcador.distancia + "m.",
     confirmButtonText: 'Aceptar',
   })
 }
@@ -66,8 +66,15 @@ function obtenerHoraActual() {
 //--------------------------------------------------------------------------------------------------
 //Añade la dirección al trayecto.
 function añadirDireccion(latlng, direccion) {
-  let opcion = document.createElement('option')
-  opcion.setAttribute("posicion", latlng)
-  opcion.innerText = direccion
-  sTrazado.appendChild(opcion)
+  //Si no es la última muestra.
+  if (!ultimaMuestra) {
+    let opcion = document.createElement('option')
+    opcion.setAttribute("latitud", latlng.lat());
+    opcion.setAttribute("longitud", latlng.lng());
+    opcion.id = "P" + marcadores.length
+    opcion.innerText = direccion
+    sTrazado.appendChild(opcion)
+  } else {
+    ultimaMuestra = false;
+  }
 }

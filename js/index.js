@@ -36,7 +36,9 @@ iColor.addEventListener('change', actualizarTrazado,false)
 iAncho.addEventListener('change', actualizarTrazado, false)
 //Evento change al cambiar el la selección del trayecto.
 sTrazado.addEventListener('change', (evt)=>{
-  mapa.setCenter(evt.target.posicion)
+  let latitud=evt.target.options[evt.target.selectedIndex].getAttribute("latitud")
+  let longitud=evt.target.options[evt.target.selectedIndex].getAttribute("longitud")
+  mapa.setCenter(new google.maps.LatLng(latitud,longitud))
 },false)
 
 //--------------------------------------------------------------------------------------------------
@@ -57,9 +59,9 @@ function iniciarPararRuta() {
     bInicioParo.style.backgroundColor = '#24f519'
     bInicioParo.value = 'Iniciar'
     pararCapturaDatos()
-    primeraMuestra = true;
     sTrazado.disabled=false //Habilita la select con las localizaciones del trazado.
     rutaIniciada = false
+    primeraMuestra = true;
   } else {
     sTrazado.innerHTML = "";
     sTrazado.dissabled=true //Deshabilita la select con las localizaciones del trazado.
@@ -85,7 +87,7 @@ function iniciarCapturaDatos() {
   }, intervaloTiempoMuestra * 1000)
 }
 
-//--------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------
 //Parar toma de datos.
 function pararCapturaDatos() {
   //Finaliza la captura de datos.
@@ -95,12 +97,10 @@ function pararCapturaDatos() {
     marcadores[marcadores.length - 1].setMap(null)
     ultimaMuestra=true
     añadirMarcador(posicionGeolocalizacion)
-  }else if(marcadores.length==0){
-    reproducirMensaje("No se han registrado datos.")
-  }else{
     reproducirMensaje('Fin de la toma de datos.')
+  }else if(marcadores.length==0){
+      reproducirMensaje("No se han registrado datos.")
   }  
-  ultimaMuestra=false
 }
 
 //--------------------------------------------------------------------------------------------------
