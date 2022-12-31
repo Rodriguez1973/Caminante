@@ -64,7 +64,7 @@ function iniciarPararRuta() {
     primeraMuestra = true;
   } else {
     sTrazado.innerHTML = "";
-    sTrazado.dissabled=true //Deshabilita la select con las localizaciones del trazado.
+    sTrazado.disabled=true //Deshabilita la select con las localizaciones del trazado.
     borrarMarcadores()
     borrarTrazado()
     rutaIniciada = true
