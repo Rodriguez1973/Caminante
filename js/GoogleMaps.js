@@ -116,10 +116,10 @@ function añadirMarcador(geolocalizacion) {
           marcadores[marcadores.length - 1].position,
         ) * 100,
       ) / 100
-  //Si es la última muestra.
+    //Si es la última muestra.
   } else if (ultimaMuestra) {
-    if (marcadores.length > 0) {
-      geolocalizacion = marcadores[marcadores.length - 1].position
+    geolocalizacion = marcadores[marcadores.length - 1].position
+    if (marcadores.length > 1) {
       distanciaEntrePuntos =
         Math.round(
           calcularDistancia2Puntos(
@@ -128,7 +128,7 @@ function añadirMarcador(geolocalizacion) {
           ) * 100,
         ) / 100
     }
-    marcadores.pop()  //Elimina el último elemento del array.
+    marcadores.pop() //Elimina el último elemento del array.
   }
 
   //Si es la primera o última muestra, o cualquier otra posición a una distancia con el punto anterior igual o superior la distancia mínima.
